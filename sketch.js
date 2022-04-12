@@ -19,6 +19,7 @@ var adventureManager;
 // p5.play
 var playerAvatar;
 
+
 // Clickables: the manager class
 var clickablesManager;    // the manager class
 var clickables;           // an array of clickable objects
@@ -55,7 +56,7 @@ function setup() {
   //---
 
   // MODIFY THIS: change to initial position
-  playerAvatar = new Avatar("Player", 640, 400);
+  playerAvatar = new Avatar("Player", 80, 50);
    
   // MODIFY THIS: to make your avatar go faster or slower
   playerAvatar.setMaxSpeed(5);
@@ -216,6 +217,22 @@ class InstructionsScreen extends PNGRoom {
 
     // Draw text in a box
     text(this.instructionsText, width/6, height/6, this.textBoxWidth, this.textBoxHeight );
+  }
+}
+
+//ADD ROOM
+class scene1Room extends PNGRoom {
+  preload() {
+    // define class varibles here, load images or anything else
+  }
+
+  // call the PNGRoom superclass's draw function to draw the background image
+  // and draw our code adter this
+  draw() {
+    // this calls PNGRoom.draw()
+    super.draw();
+
+    // Add your code here
   }
 }
 
