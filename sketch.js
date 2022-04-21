@@ -141,6 +141,9 @@ function mouseReleased() {
   }
 }
 
+function keyPressed() {
+  adventureManager.keyPressed();
+}
 
 //-------------- CLICKABLE CODE  ---------------//
 
@@ -219,7 +222,70 @@ class InstructionsScreen extends PNGRoom {
     text(this.instructionsText, width/6, height/6, this.textBoxWidth, this.textBoxHeight );
   }
 }
+//-- MODIFY THIS: for your own classes
+// NEW: NPCClass
+class NPCRoom extends PNGRoom {
+  preload() {
+    // define class varibles here, load images or anything else
+    this.npc1 = new NPC("Blobbie", 500, 200, 'assets/bahay.png');
+    this.npc1.addSingleInteraction("Mabuhay!");
+    this.npc1.addSingleInteraction("Isn't it a beautiful day!");
+    this.npc1.addSingleInteraction("I want some mango");
 
+    //this.npc2.addSingleInteraction("If you wouldn\'t mind...I could really use a star right now!");
+    //this.npc2.setupQuest("Star", "Thanks! This is just what I needed", "I didn't ask for that!");
+
+    
+    // setup flag, seto false
+    this.hasSetup = false;
+  }
+
+  // call the PNGRoom superclass's draw function to draw the background image
+  // and draw our code adter this
+  draw() {
+    // Idea is to call the npc1.setup() function ONE time, so we use this kind of flag
+    if( this.hasSetup === false ) {
+      // setup NPC 1
+      this.npc1.setup();
+      this.npc1.setPromptLocation(0,-30);
+
+      this.hasSetup = true; 
+    }
+
+    // this calls PNGRoom.draw()
+    super.draw();
+
+    // draw our NPCs
+    drawSprite(this.npc1.sprite);
+
+    // When you have multiple NPCs, you can add them to an array and have a function 
+    // iterate through it to call this function for each more concisely.
+    this.npc1.displayInteractPrompt(playerAvatar);
+  }
+
+  // custom code here to do stuff upon exiting room
+  unload() {
+    // reset NPC interaction to beginning when entering room
+    this.npc1.resetInteraction();
+  }
+
+  // custom code here to do stuff upon entering room
+  load() {
+    // pass to PNGRoom to load image
+    super.load();
+    
+    // Add custom code here for unloading
+  }
+
+  keyPressed() {
+    if(key === ' ') {
+      if(this.npc1.isInteracting(playerAvatar)) {
+        this.npc1.continueInteraction();
+      }
+    }
+  }
+
+}
 //ADD ROOM
 class scene1Room extends PNGRoom {
   preload() {

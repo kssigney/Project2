@@ -146,3 +146,121 @@ class StaticSprite {
     this.sprite.addImage('static', this.img );
   }
 }
+
+/*
+  NPC Class - By Luis, modified by Scott
+  
+  This is a custom NPC class that extends the current Avatar class. An NPC will be able
+  to have conversations with the player, who will be prompted to press a key in order
+  to start a dialogue. Dialogue is progressed by pressing the same button while overlapping
+  the NPC sprite. If a player steps away from an NPC, the dialogue will disappear.
+
+  Functions:
+
+*/
+
+class NPC extends Avatar {
+  constructor(name, x, y, pngPath) {
+    super(name, x, y);
+    this.interactionsArray = [];
+    this.interactionIndex = 0;
+    this.isActive = false;
+    this.interactWithMeMessage = 'Press SPACE to interact'; 
+    this.displayMessage = this.interactWithMeMessage;
+    this.img = loadImage(pngPath);
+
+    this.promptX = 0;
+    this.promptY = -50; 
+    this.keyCodeNum = 32;   // default to SPACE Bar
+    this.state = "default";
+  }
+
+  // Same as StaticSprite class, to support static NPCs
+  setup() {
+    this.sprite.addImage('static', this.img );
+  }
+
+  // default is space bar, this allows for others
+  setInteractionKeyCode(keyCodeNum) {
+    this.keyCodeNum = keyCodeNum;
+  }
+
+  // default interact with me message
+  setInteractWithMeMessage(interactWithMeMessage) {
+    this.interactWithMeMessage = interactWithMeMessage;
+  }
+  
+  // where prompt will be located
+  setPromptLocation(x,y) {
+    this.promptX = x;
+    this.promptY = y;
+  }
+
+  // allows for you to set a state message, can be anything you want
+  setState(state) {
+    this.state = state;
+  }
+
+  // Adds a single interaction to the array, should be a string parameter.
+  addSingleInteraction(interaction) {
+    this.interactionsArray.push(interaction);
+  }
+
+  // displays interactin prompt, usually with a collision
+  displayInteractPrompt(target) {
+    // Only displays the interact prompt or current dialogue of the NPC when the player 
+    // avatar is overlapping the NPC sprite.
+    if(target.sprite.overlap(this.sprite)) {
+      this.drawPrompt();
+      if(keyCode === this.keyCodeNum ) {
+        // This variable is to ensure that only one NPC is active at a time. Without this,
+        // having multiple NPCs on a single screen may cause some bugs in the progression of
+        // their individual dialogue.
+        this.isActive = true;
+        // Keeps an NPC from moving when they're being interacted with. Haven't tested yet, but
+        // the idea is to be able to have NPCs that walk around on a set path. If you interact 
+        // with an NPC during its cycle, it'll pause. Still thinking about how to continue the 
+        // cycle afterwards.
+        this.setSpeed(0,0);
+    
+        this.displayMessage = this.interactionsArray[this.interactionIndex];
+      }
+    }
+    else {
+      // Go back to interact with me message
+      this.displayMessage = this.interactWithMeMessage;
+      this.isActive = false;
+    }  
+  }
+
+  // MODIFY THIS - drawing of the prompt
+  drawPrompt() {
+      fill('white');
+      textSize(14);
+      
+      textAlign(CENTER);
+      
+      text(this.displayMessage, this.sprite.position.x + this.promptX, this.sprite.position.y + this.promptY);
+  }
+
+  // Continues the conversation with an NPC through the interaction array.
+  continueInteraction() {
+    if(this.isActive) {
+      if(this.interactionIndex < this.interactionsArray.length-1) {
+        this.interactionIndex++;
+      }
+    }
+  }
+
+  // goes to zero
+  resetInteraction() {
+    this.interactionIndex = 0;
+  }
+
+  // Check for player avatar overlapping an NPC sprite and if that NPC and if that NPC 
+  // is the current active NPC (only 1 at a time);
+  isInteracting(target) {
+    return target.sprite.overlap(this.sprite) && this.isActive;
+  }
+}
+

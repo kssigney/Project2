@@ -118,20 +118,7 @@ class AdventureManager {
 
     // move to interation table!
     keyPressed(keyChar) {
-       // go through each row, look for a match to the current state
-      for (let i = 0; i < this.interactionTable.getRowCount(); i++) {
-
-        // the .name property of a function will convert function to string for comparison
-        if(this.currentStateName === this.interactionTable.getString(i, 'CurrentState') ) {
-            // now, look for a match with the key typed, converting it to a string
-            if( this.interactionTable.getString(i, 'KeyTyped') === String(keyChar) ) {
-                // if a match, set the drawFunction to the next state, eval() converts
-                // string to function
-                this.changeState(this.interactionTable.getString(i, 'NextState') );
-                break;
-            }
-        }
-      }
+        this.states[this.currentState].keyPressed();
     }
 
     // Right now, just support for mouse released, but in future will have
@@ -483,9 +470,6 @@ class PNGRoom {
        
     }
 
-
-
-
     load() {
         this.image = loadImage(this.imagePath);
         // this loads the collision table, we use the flag b/c loadTable needs
@@ -500,7 +484,6 @@ class PNGRoom {
             print( "load() for: " + this.stateName );
             print("Collision table row count = " + this.collisionTable.getRowCount());
         }
-
     }
 
     unload() {
@@ -513,6 +496,8 @@ class PNGRoom {
             return;
         }
 
+        this.checkLoadedTable();
+
         push();
         imageMode(CENTER);
         image(this.image,width/2,height/2);
@@ -522,6 +507,11 @@ class PNGRoom {
         // draw rects to see...
 
         pop(); 
+    }
+
+    // do nothing subclasses can override (or not)
+    keyPressed() {
+
     }
 
     // Go through our array and ook to see if we are in bounds anywhere
@@ -540,6 +530,19 @@ class PNGRoom {
         return false; 
     }
 
+    checkLoadedTable() {
+        if( this.collisionTable !== null && this.collisionSX.length === 0 ) {
+            print("Collision table row count = " + this.collisionTable.getRowCount());
+            for( let i = 0; i < this.collisionTable.getRowCount(); i++ ) {
+                this.collisionSX[i] = this.collisionTable.getString(i, 'sx');
+                this.collisionSY[i] = this.collisionTable.getString(i, 'sy');
+                this.collisionEX[i] = this.collisionTable.getString(i, 'ex');
+                this.collisionEY[i] = this.collisionTable.getString(i, 'ey');
+            }
+    
+            this.collisionTableLoaded = true;
+        }
+    }
     
     // output to DebugScreen or console window, if we have no debug object
     output(s) {
