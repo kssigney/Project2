@@ -33,7 +33,7 @@ const A_KEY = 65;
 //---
 
 //-- MODIFY THIS for different speeds
-var speed = 10;
+var speed = 5;
 
 //--- Your globals would go here
 
@@ -181,8 +181,6 @@ clickableButtonPressed = function() {
 }
 //
 
-
-
 //-------------- SUBCLASSES / YOUR DRAW CODE CAN GO HERE ---------------//
 
 //-- MODIFY THIS:
@@ -224,14 +222,19 @@ class InstructionsScreen extends PNGRoom {
 }
 //-- MODIFY THIS: for your own classes
 // NEW: NPCClass
+var input, button, information;
+
 class NPCRoom extends PNGRoom {
   preload() {
     // define class varibles here, load images or anything else
-    this.npc1 = new NPC("Blobbie", 500, 200, 'assets/bahay.png');
+    this.npc1 = new NPC("Bahay", 500, 200, 'assets/bahay.png');
     this.npc1.addSingleInteraction("Mabuhay!");
     this.npc1.addSingleInteraction("Isn't it a beautiful day!");
     this.npc1.addSingleInteraction("I want some mango");
 
+    fill(255);
+    textAlign(CENTER);
+    textSize(12);
     //this.npc2.addSingleInteraction("If you wouldn\'t mind...I could really use a star right now!");
     //this.npc2.setupQuest("Star", "Thanks! This is just what I needed", "I didn't ask for that!");
 
@@ -240,6 +243,38 @@ class NPCRoom extends PNGRoom {
     this.hasSetup = false;
   }
 
+  setup() {
+    input = createInput();
+    input.position(300, 30);
+
+    button = createButton("submit");
+    button.position(input.x + input.width, 30);
+    button.mousePressed(info);
+
+    information = createElement("h2", "Name");
+    information.position(20, 5);
+
+    textAlign(CENTER);
+    textSize(50);
+
+  }
+
+  
+  info() {
+    const name = input.value();
+    information.html(name);
+    input.value("");
+  }
+/*
+  load() {
+    input.position(300, 30);
+  }
+
+  
+  unload() {
+    input.position(-3000, 30);
+  }
+  */
   // call the PNGRoom superclass's draw function to draw the background image
   // and draw our code adter this
   draw() {
@@ -247,7 +282,7 @@ class NPCRoom extends PNGRoom {
     if( this.hasSetup === false ) {
       // setup NPC 1
       this.npc1.setup();
-      this.npc1.setPromptLocation(0,-30);
+      this.npc1.setPromptLocation(0,-50);
 
       this.hasSetup = true; 
     }
@@ -261,6 +296,17 @@ class NPCRoom extends PNGRoom {
     // When you have multiple NPCs, you can add them to an array and have a function 
     // iterate through it to call this function for each more concisely.
     this.npc1.displayInteractPrompt(playerAvatar);
+    
+    //create own signature
+    noStroke();
+
+    if (mouseIsPressed) {
+      fill("black");
+    }
+    else {
+      noFill();
+    }
+    ellipse(mouseX, mouseY, 10, 10);  
   }
 
   // custom code here to do stuff upon exiting room
@@ -286,22 +332,24 @@ class NPCRoom extends PNGRoom {
   }
 
 }
+
 //ADD ROOM
 class scene1Room extends PNGRoom {
   preload() {
     // define class varibles here, load images or anything else
   }
-
   // call the PNGRoom superclass's draw function to draw the background image
   // and draw our code adter this
   draw() {
     // this calls PNGRoom.draw()
     super.draw();
 
+      
     // Add your code here
   }
 }
 
+// ORIGINAL TEMPLATE FOR PNG ROOMS
 //-- MODIFY THIS: for your own classes
 // (1) copy this code block below
 // (2) paste after //-- done copy
@@ -322,4 +370,3 @@ class TemplateScreen extends PNGRoom {
   }
 }
 //-- done copy
-
