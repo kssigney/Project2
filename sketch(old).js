@@ -56,7 +56,7 @@ function setup() {
   //---
 
   // MODIFY THIS: change to initial position
-  playerAvatar = new Avatar("Player", 640, 360);
+  playerAvatar = new Avatar("Player", 80, 50);
    
   // MODIFY THIS: to make your avatar go faster or slower
   playerAvatar.setMaxSpeed(5);
@@ -132,13 +132,14 @@ function checkMovement() {
   playerAvatar.setSpeed(xSpeed,ySpeed);
 }
 //--
+
 //-- MODIFY THIS: this is an example of how I structured my code. You may
 // want to do it differently
-//function mouseReleased() {
-  //if( adventureManager.getStateName() === "Hiraya") {
-    //adventureManager.changeState("Instructions");
-  //}
-//}
+function mouseReleased() {
+  if( adventureManager.getStateName() === "Hiraya") {
+    adventureManager.changeState("Instructions");
+  }
+}
 
 function keyPressed() {
   adventureManager.keyPressed();
@@ -236,31 +237,52 @@ class NPCRoom extends PNGRoom {
     textSize(12);
     //this.npc2.addSingleInteraction("If you wouldn\'t mind...I could really use a star right now!");
     //this.npc2.setupQuest("Star", "Thanks! This is just what I needed", "I didn't ask for that!");
+
     
-    // setup flag, set it to false
+    // setup flag, seto false
     this.hasSetup = false;
-
-    //customize your volunteer sheet
-    input = createInput();
-    input.position(1000, 455);
-    input.hide();
-
-    button = createButton("submit");
-    button.position(input.x + input.width, 455);
-    button.mousePressed(info);
-    button.hide();
-
-    information = createElement("h2", "Name");
-    information.position(750, 430);
-    information.hide();
   }
 
+  setup() {
+    input = createInput();
+    input.position(300, 30);
+
+    button = createButton("submit");
+    button.position(input.x + input.width, 30);
+    button.mousePressed(info);
+
+    information = createElement("h2", "Name");
+    information.position(20, 5);
+
+    textAlign(CENTER);
+    textSize(50);
+
+  }
+
+  
+  info() {
+    const name = input.value();
+    information.html(name);
+    input.value("");
+  }
+/*
+  load() {
+    input.position(300, 30);
+  }
+
+  
+  unload() {
+    input.position(-3000, 30);
+  }
+  */
+  // call the PNGRoom superclass's draw function to draw the background image
+  // and draw our code adter this
   draw() {
     // Idea is to call the npc1.setup() function ONE time, so we use this kind of flag
     if( this.hasSetup === false ) {
       // setup NPC 1
       this.npc1.setup();
-      this.npc1.setPromptLocation(0,-100);
+      this.npc1.setPromptLocation(0,-50);
 
       this.hasSetup = true; 
     }
@@ -274,9 +296,10 @@ class NPCRoom extends PNGRoom {
     // When you have multiple NPCs, you can add them to an array and have a function 
     // iterate through it to call this function for each more concisely.
     this.npc1.displayInteractPrompt(playerAvatar);
-
+    
     //create own signature
     noStroke();
+
     if (mouseIsPressed) {
       fill("black");
     }
@@ -288,27 +311,14 @@ class NPCRoom extends PNGRoom {
 
   // custom code here to do stuff upon exiting room
   unload() {
-    console.log("unloading NPC Room")
     // reset NPC interaction to beginning when entering room
-
-    input.hide();
-    button.hide();
-    information.hide();
-    
     this.npc1.resetInteraction();
   }
-
 
   // custom code here to do stuff upon entering room
   load() {
     // pass to PNGRoom to load image
     super.load();
-
-    input.show();
-    button.show();
-    information.show();
-
-    console.log("loading NPC Room")
     
     // Add custom code here for unloading
   }
@@ -322,38 +332,21 @@ class NPCRoom extends PNGRoom {
   }
 
 }
-//customized name is shown
-function info() {
-  const name = input.value();
-  information.html(name);
-  input.value("");
-}
 
-var myCounter = 0; 
-var veggie = [];
-
-class scene8Room extends PNGRoom {
+//ADD ROOM
+class scene1Room extends PNGRoom {
   preload() {
-    veggie[0] = loadImage("assets/veggie1.png");
-    veggie[1] = loadImage("assets/veggie2.png");
-    veggie[2] = loadImage("assets/veggie3.png");
-    veggie[3] = loadImage("assets/veggie4.png");
+    // define class varibles here, load images or anything else
   }
-
+  // call the PNGRoom superclass's draw function to draw the background image
+  // and draw our code adter this
   draw() {
     // this calls PNGRoom.draw()
     super.draw();
+
       
     // Add your code here
   }
-}
-function mousePressed() {
-  myCounter ++;
-
-  if (myCounter == veggie.length) {
-    myCounter = 0;
-  }
-  image(veggie[myCounter], mouseX, mouseY, 80,80);
 }
 
 // ORIGINAL TEMPLATE FOR PNG ROOMS

@@ -1,5 +1,5 @@
 CurrentState,ClickableName,MapDirection,NextState
-Hiraya,,,Instructions
+Hiraya,ReadInstructions,,Instructions
 Instructions,StartGame,,Start
 Start,,N,scene2
 Start,,S,scene8

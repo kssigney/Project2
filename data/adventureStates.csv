@@ -9,5 +9,5 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 7,scene7,PNGRoom,assets/scene7.png,
 8,scene6,PNGRoom,assets/scene6.png,assets/scene6_cl.csv
 9,scene5,PNGRoom,assets/scene5.png,assets/scene5_cl.csv
-10,scene8,PNGRoom,Assets/scene8.png,assets/scene8_cl.csv
-11,scene9,PNGRoom,Assets/scene9.png,assets/scene9_cl.csv
+10,scene8,scene8Room,assets/scene8.png,assets/scene8_cl.csv
+11,scene9,PNGRoom,assets/scene9.png,assets/scene9_cl.csv
