@@ -180,6 +180,17 @@ clickableButtonPressed = function() {
 }
 //
 
+// signature function
+function touchMoved() {
+ 
+  if( adventureManager.getStateName() === "Start") {
+    adventureManager.getCurrentStateRoom().sign();
+  }
+
+  // line(mouseX, mouseY, pmouseX, pmouseY);
+  // return false;
+}
+
 //-------------- SUBCLASSES / YOUR DRAW CODE CAN GO HERE ---------------//
 
 //-- MODIFY THIS:
@@ -231,6 +242,11 @@ class NPCRoom extends PNGRoom {
     this.npc1.addSingleInteraction("Isn't it a beautiful day!");
     this.npc1.addSingleInteraction("I want some mango");
 
+    this.pMouseX = [];
+    this.pMouseY = [];
+    this.mouseX = [];
+    this.mouseY = [];
+    
     fill(255);
     textAlign(CENTER);
     textSize(12);
@@ -275,15 +291,12 @@ class NPCRoom extends PNGRoom {
     // iterate through it to call this function for each more concisely.
     this.npc1.displayInteractPrompt(playerAvatar);
 
-    //create own signature
-    noStroke();
-    if (mouseIsPressed) {
-      fill("black");
-    }
-    else {
-      noFill();
-    }
-    ellipse(mouseX, mouseY, 10, 10);  
+    // draw the signature
+    strokeWeight(1);
+    stroke(0);
+    for( let i = 1; i < this.mouseX.length; i++ ) {
+      line(this.pMouseX[i], this.pMouseY[i], this.mouseX[i], this.mouseY[i]);
+    } 
   }
 
   // custom code here to do stuff upon exiting room
@@ -321,6 +334,16 @@ class NPCRoom extends PNGRoom {
     }
   }
 
+  sign() {
+    // constrain to a specific region 
+    if( mouseX > 740 && mouseX < 1200 && mouseY > 620 && mouseY < 715 ) {
+   
+      this.pMouseX.push(pmouseX);
+      this.pMouseY.push(pmouseY);
+      this.mouseX.push(mouseX);
+      this.mouseY.push(mouseY);
+    }
+  }
 }
 //customized name is shown
 function info() {

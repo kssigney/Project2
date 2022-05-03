@@ -224,6 +224,10 @@ class AdventureManager {
         return this.currentState;
     }
 
+    getCurrentStateRoom() {
+        return this.states[this.currentState];
+    }
+
     getStateNumFromString(stateStr) {
         for (let i = 0; i < this.statesTable.getRowCount(); i++) {
             if( stateStr === this.statesTable.getString(i, 'StateName') ) {
