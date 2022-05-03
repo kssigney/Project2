@@ -355,7 +355,7 @@ function info() {
 var myCounter = 0; 
 var veggie = [];
 
-class scene8Room extends PNGRoom {
+class scene5Room extends PNGRoom {
   preload() {
     veggie[0] = loadImage("assets/veggie1.png");
     veggie[1] = loadImage("assets/veggie2.png");
