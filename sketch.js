@@ -80,7 +80,7 @@ function setup() {
   // that are not in the array 
   setupClickables(); 
   //--
-  //adventureManager.changeState("scene5");
+  //adventureManager.changeState("scene3");
 }
 
 // Adventure manager handles it all!
@@ -103,9 +103,14 @@ function draw() {
     checkMovement();
 
     // this is a function of p5.play, not of this sketch
-    drawSprite(playerAvatar.sprite);
+    if( adventureManager.getStateName() !== "scene3" ) { 
+      drawSprite(playerAvatar.sprite);
+    }
+    
     //--
   } 
+
+  playerAvatar.update();
 }
 
 //--- TEMPLATE STUFF: Don't change 
@@ -398,47 +403,40 @@ var overlapCount = 0;
 var preventPickup = false;        // for when you drop one
 var preventRepickup = false;      // two objects
 
+// Two things:
+// (1) position in front of the avatar
+// (2) if you have 1, it will swap
 class scene3Room extends PNGRoom {
   preload() {
-    grabbables.push(new StaticSprite("sign1", 500, 100, 'assets/sign1.png'));
+    grabbables.push(new StaticSprite("sign1", 100, 500, 'assets/sign1.png'));
     grabbables.push(new StaticSprite("sign2", 500, 500, 'assets/sign2.png'));
+  
+    this.isSetup = false;
   }
 
   draw() {
-    super.draw();
-    checkOverlaps();
-     // go through grabble array and set these 
-     overlapCount = 0;
-     for( let i = 0; i < grabbables.length; i++ ) {
-       playerAvatar.sprite.overlap(grabbables[i].sprite, grabbableCollision);
-      }
-    
-      // we aren't overlapping, so prevent re-pickup
-      if( overlapCount === 0 ) {
-        preventPickup = false;
-      }
-      if( overlapCount === 1 ) {
-        preventRepickup = false;
-      }
-
-    grabbableCollision(spriteA, spriteB);
-    overlapCount++;
-    
-    if( preventPickup || preventRepickup ) {
-      return;
-    }
-    // check for new grabble (not self)
-    if( playerAvatar.grabbable === undefined || playerAvatar.grabbable.sprite !== spriteB ) {
+    // setup once
+    if( this.isSetup === false ) {
       for( let i = 0; i < grabbables.length; i++ ) {
-        if( grabbables[i].sprite === spriteB ) {
-          //console.log("new set: " + i);
-          playerAvatar.setGrabbable(grabbables[i]);
-          preventRepickup = true;
-          break;
-        }
+        grabbables[i].setup();
       }
+      this.isSetup = true;
     }
-  }    
+    super.draw();
+
+    drawSprite(playerAvatar.sprite);
+
+    for( let i = 0; i < grabbables.length; i++ ) {
+      drawSprite(grabbables[i].sprite);
+    }
+
+    // go through grabbables and attach 1 to avatar
+    for( let i = 0; i < grabbables.length; i++ ) {
+      if( playerAvatar.sprite.overlap(grabbables[i].sprite) ) {
+         playerAvatar.setGrabbable(grabbables[i]);
+      }
+    }    
+  }
 }
 
 // ORIGINAL TEMPLATE FOR PNG ROOMS
