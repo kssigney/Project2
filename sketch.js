@@ -80,6 +80,7 @@ function setup() {
   // that are not in the array 
   setupClickables(); 
   //--
+  //adventureManager.changeState("scene5");
 }
 
 // Adventure manager handles it all!
@@ -144,6 +145,13 @@ function keyPressed() {
   adventureManager.keyPressed();
 }
 
+// global function
+function mousePressed() {
+  if( adventureManager.getStateName() === "scene5" ) {
+    vegMouseX.push(mouseX);
+    vegMouseY.push(mouseY); 
+  }
+}
 //-------------- CLICKABLE CODE  ---------------//
 
 //--- TEMPLATE STUFF: Don't change 
@@ -352,8 +360,10 @@ function info() {
   input.value("");
 }
 
-var myCounter = 0; 
+// globals because we are using them in  mouse pressed
 var veggie = [];
+var vegMouseX = [];
+var vegMouseY = [];
 
 class scene5Room extends PNGRoom {
   preload() {
@@ -364,19 +374,71 @@ class scene5Room extends PNGRoom {
   }
 
   draw() {
+    push();
     // this calls PNGRoom.draw()
     super.draw();
       
-    // Add your code here
+    // Draw all the vegetables
+    // for( let i = 0; i < veggie.length; i++ ) {
+    //   image(veggie[i], vegMouseX[i], vegMouseY[i], 80,80);
+    // }  
+
+    imageMode(CENTER);
+    for( let i = 0; i < vegMouseX.length; i++ ) {
+      image(veggie[i%4], vegMouseX[i], vegMouseY[i], 80,80);
+    }  
+  
+    pop();
   }
 }
-function mousePressed() {
-  myCounter ++;
 
-  if (myCounter == veggie.length) {
-    myCounter = 0;
+// control variables for grabbables
+var grabbables = [];
+var overlapCount = 0;
+var preventPickup = false;        // for when you drop one
+var preventRepickup = false;      // two objects
+
+class scene3Room extends PNGRoom {
+  preload() {
+    grabbables.push(new StaticSprite("sign1", 500, 100, 'assets/sign1.png'));
+    grabbables.push(new StaticSprite("sign2", 500, 500, 'assets/sign2.png'));
   }
-  image(veggie[myCounter], mouseX, mouseY, 80,80);
+
+  draw() {
+    super.draw();
+    checkOverlaps();
+     // go through grabble array and set these 
+     overlapCount = 0;
+     for( let i = 0; i < grabbables.length; i++ ) {
+       playerAvatar.sprite.overlap(grabbables[i].sprite, grabbableCollision);
+      }
+    
+      // we aren't overlapping, so prevent re-pickup
+      if( overlapCount === 0 ) {
+        preventPickup = false;
+      }
+      if( overlapCount === 1 ) {
+        preventRepickup = false;
+      }
+
+    grabbableCollision(spriteA, spriteB);
+    overlapCount++;
+    
+    if( preventPickup || preventRepickup ) {
+      return;
+    }
+    // check for new grabble (not self)
+    if( playerAvatar.grabbable === undefined || playerAvatar.grabbable.sprite !== spriteB ) {
+      for( let i = 0; i < grabbables.length; i++ ) {
+        if( grabbables[i].sprite === spriteB ) {
+          //console.log("new set: " + i);
+          playerAvatar.setGrabbable(grabbables[i]);
+          preventRepickup = true;
+          break;
+        }
+      }
+    }
+  }    
 }
 
 // ORIGINAL TEMPLATE FOR PNG ROOMS

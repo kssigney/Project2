@@ -4,7 +4,7 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 2,Start,NPCRoom,assets/Start.png,
 3,scene1,PNGRoom,assets/scene1.png,assets/scene1_cl.csv
 4,scene2,PNGRoom,assets/scene2.png,assets/scene2_cl.csv
-5,scene3,PNGRoom,assets/scene3.png,assets/scene3_cl.csv
+5,scene3,scene3Room,assets/scene3.png,assets/scene3_cl.csv
 6,scene4,PNGRoom,assets/scene4.png,
 7,scene7,PNGRoom,assets/scene7.png,
 8,scene6,PNGRoom,assets/scene6.png,assets/scene6_cl.csv
