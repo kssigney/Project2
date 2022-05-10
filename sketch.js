@@ -157,6 +157,12 @@ function mousePressed() {
     vegMouseY.push(mouseY); 
   }
 }
+function mousePressed() {
+  if( adventureManager.getStateName() === "scene9" ) {
+    plantMouseX.push(mouseX);
+    plantMouseY.push(mouseY); 
+  }
+}
 //-------------- CLICKABLE CODE  ---------------//
 
 //--- TEMPLATE STUFF: Don't change 
@@ -461,9 +467,6 @@ class scene6Room extends PNGRoom {
 
     for (let j = 0; j < 30; j++) {
       var trash = createSprite(random(width*10), random(height));
-      dot.addAnimation(
-        "normal",
-        {images of the trash array});
       collectibles.add(dot);
     }
 
@@ -473,6 +476,33 @@ class scene6Room extends PNGRoom {
     
     collect(collector, collected) {
       collected.remove();*/
+  }
+}
+
+// globals because we are using them in  mouse pressed
+var plants = [];
+var plantMouseX = [];
+var plantMouseY = [];
+
+class scene9Room extends PNGRoom {
+  preload() {
+    plants[0] = loadImage("assets/plants1.png");
+    plants[1] = loadImage("assets/plants2.png");
+    plants[2] = loadImage("assets/plants3.png");
+    
+  }
+
+  draw() {
+    push();
+    // this calls PNGRoom.draw()
+    super.draw();
+ 
+    imageMode(CENTER);
+    for( let i = 0; i < plantMouseX.length; i++ ) {
+      image(plants[i%3], plantMouseX[i], plantMouseY[i], 100,100);
+    }  
+  
+    pop();
   }
 }
 

@@ -10,4 +10,4 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 8,scene6,PNGRoom,assets/scene6.png,assets/scene6_cl.csv
 9,scene5,scene5Room,assets/scene5.png,assets/scene5_cl.csv
 10,scene8,PNGRoom,assets/scene8.png,assets/scene8_cl.csv
-11,scene9,PNGRoom,assets/scene9.png,assets/scene9_cl.csv
+11,scene9,scene9Room,assets/scene9.png,assets/scene9_cl.csv
