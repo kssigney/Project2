@@ -1,6 +1,6 @@
 /***********************************************************************************
-  MoodyMaze
-  by Scott Kildall
+  Hiraya
+  by Kiana Star Signey
 
   Uses the p5.2DAdventure.js class 
   
@@ -247,7 +247,7 @@ class InstructionsScreen extends PNGRoom {
 // NEW: NPCClass
 var input, button, information;
 
-class NPCRoom extends PNGRoom {
+class StartRoom extends PNGRoom {
   preload() {
     // define class varibles here, load images or anything else
     this.npc1 = new NPC("Bahay", 500, 200, 'assets/bahay.png');
@@ -365,38 +365,6 @@ function info() {
   input.value("");
 }
 
-// globals because we are using them in  mouse pressed
-var veggie = [];
-var vegMouseX = [];
-var vegMouseY = [];
-
-class scene5Room extends PNGRoom {
-  preload() {
-    veggie[0] = loadImage("assets/veggie1.png");
-    veggie[1] = loadImage("assets/veggie2.png");
-    veggie[2] = loadImage("assets/veggie3.png");
-    veggie[3] = loadImage("assets/veggie4.png");
-  }
-
-  draw() {
-    push();
-    // this calls PNGRoom.draw()
-    super.draw();
-      
-    // Draw all the vegetables
-    // for( let i = 0; i < veggie.length; i++ ) {
-    //   image(veggie[i], vegMouseX[i], vegMouseY[i], 80,80);
-    // }  
-
-    imageMode(CENTER);
-    for( let i = 0; i < vegMouseX.length; i++ ) {
-      image(veggie[i%4], vegMouseX[i], vegMouseY[i], 80,80);
-    }  
-  
-    pop();
-  }
-}
-
 // control variables for grabbables
 var grabbables = [];
 var overlapCount = 0;
@@ -436,6 +404,75 @@ class scene3Room extends PNGRoom {
          playerAvatar.setGrabbable(grabbables[i]);
       }
     }    
+  }
+}
+// globals because we are using them in  mouse pressed
+var veggie = [];
+var vegMouseX = [];
+var vegMouseY = [];
+
+class scene5Room extends PNGRoom {
+  preload() {
+    veggie[0] = loadImage("assets/veggie1.png");
+    veggie[1] = loadImage("assets/veggie2.png");
+    veggie[2] = loadImage("assets/veggie3.png");
+    veggie[3] = loadImage("assets/veggie4.png");
+  }
+
+  draw() {
+    push();
+    // this calls PNGRoom.draw()
+    super.draw();
+      
+    // Draw all the vegetables
+    // for( let i = 0; i < veggie.length; i++ ) {
+    //   image(veggie[i], vegMouseX[i], vegMouseY[i], 80,80);
+    // }  
+
+    imageMode(CENTER);
+    for( let i = 0; i < vegMouseX.length; i++ ) {
+      image(veggie[i%4], vegMouseX[i], vegMouseY[i], 80,80);
+    }  
+  
+    pop();
+  }
+}
+
+var collectibles;
+var trash = [];
+
+class scene6Room extends PNGRoom {
+  preload() {
+    trash[0] = loadImage("assets/trash01.png");
+    trash[1] = loadImage("assets/trash02.png");
+    trash[2] = loadImage("assets/trash03.png");
+    trash[3] = loadImage("assets/trash04.png");
+    trash[4] = loadImage("assets/trash05.png");
+    trash[5] = loadImage("assets/trash06.png");
+  }
+
+  // call the PNGRoom superclass's draw function to draw the background image
+  // and draw our code adter this
+  draw() {
+    // this calls PNGRoom.draw()
+    super.draw();
+
+    /*collectibles = new Group();
+
+    for (let j = 0; j < 30; j++) {
+      var trash = createSprite(random(width*10), random(height));
+      dot.addAnimation(
+        "normal",
+        {images of the trash array});
+      collectibles.add(dot);
+    }
+
+    drawSprites(collectibles);
+
+    avatar.overlap(collectibles, collect);
+    
+    collect(collector, collected) {
+      collected.remove();*/
   }
 }
 
