@@ -62,8 +62,8 @@ function setup() {
   playerAvatar.setMaxSpeed(5);
 
   // MODIFY THIS: add your filenames here, right now our moving animation and standing animation are the same
-  playerAvatar.addMovingAnimation( 'assets/me-01.png', 'assets/me-04.png');
-  playerAvatar.addStandingAnimation('assets/me-01.png', 'assets/me-04.png');
+  playerAvatar.addMovingAnimation( 'assets/walking01.png', 'assets/walking06.png');
+  playerAvatar.addStandingAnimation('assets/standing01.png', 'assets/standing02.png');
 
   //--- TEMPLATE STUFF: Don't change
   // use this to track movement from toom to room in adventureManager.draw()
@@ -155,12 +155,6 @@ function mousePressed() {
   if( adventureManager.getStateName() === "scene5" ) {
     vegMouseX.push(mouseX);
     vegMouseY.push(mouseY); 
-  }
-}
-function mousePressed() {
-  if( adventureManager.getStateName() === "scene9" ) {
-    plantMouseX.push(mouseX);
-    plantMouseY.push(mouseY); 
   }
 }
 //-------------- CLICKABLE CODE  ---------------//
@@ -371,6 +365,38 @@ function info() {
   input.value("");
 }
 
+// globals because we are using them in  mouse pressed
+var veggie = [];
+var vegMouseX = [];
+var vegMouseY = [];
+
+class scene5Room extends PNGRoom {
+  preload() {
+    veggie[0] = loadImage("assets/veggie1.png");
+    veggie[1] = loadImage("assets/veggie2.png");
+    veggie[2] = loadImage("assets/veggie3.png");
+    veggie[3] = loadImage("assets/veggie4.png");
+  }
+
+  draw() {
+    push();
+    // this calls PNGRoom.draw()
+    super.draw();
+      
+    // Draw all the vegetables
+    // for( let i = 0; i < veggie.length; i++ ) {
+    //   image(veggie[i], vegMouseX[i], vegMouseY[i], 80,80);
+    // }  
+
+    imageMode(CENTER);
+    for( let i = 0; i < vegMouseX.length; i++ ) {
+      image(veggie[i%4], vegMouseX[i], vegMouseY[i], 80,80);
+    }  
+  
+    pop();
+  }
+}
+
 // control variables for grabbables
 var grabbables = [];
 var overlapCount = 0;
@@ -410,72 +436,6 @@ class scene3Room extends PNGRoom {
          playerAvatar.setGrabbable(grabbables[i]);
       }
     }    
-  }
-}
-// globals because we are using them in  mouse pressed
-var veggie = [];
-var vegMouseX = [];
-var vegMouseY = [];
-
-class scene5Room extends PNGRoom {
-  preload() {
-    veggie[0] = loadImage("assets/veggie1.png");
-    veggie[1] = loadImage("assets/veggie2.png");
-    veggie[2] = loadImage("assets/veggie3.png");
-    veggie[3] = loadImage("assets/veggie4.png");
-  }
-
-  draw() {
-    push();
-    // this calls PNGRoom.draw()
-    super.draw();
-      
-    // Draw all the vegetables
-    // for( let i = 0; i < veggie.length; i++ ) {
-    //   image(veggie[i], vegMouseX[i], vegMouseY[i], 80,80);
-    // }  
-
-    imageMode(CENTER);
-    for( let i = 0; i < vegMouseX.length; i++ ) {
-      image(veggie[i%4], vegMouseX[i], vegMouseY[i], 80,80);
-    }  
-  
-    pop();
-  }
-}
-
-var collectibles;
-var trash = [];
-
-class scene6Room extends PNGRoom {
-  preload() {
-    trash[0] = loadImage("assets/trash01.png");
-    trash[1] = loadImage("assets/trash02.png");
-    trash[2] = loadImage("assets/trash03.png");
-    trash[3] = loadImage("assets/trash04.png");
-    trash[4] = loadImage("assets/trash05.png");
-    trash[5] = loadImage("assets/trash06.png");
-  }
-
-  // call the PNGRoom superclass's draw function to draw the background image
-  // and draw our code adter this
-  draw() {
-    // this calls PNGRoom.draw()
-    super.draw();
-
-    /*collectibles = new Group();
-
-    for (let j = 0; j < 30; j++) {
-      var trash = createSprite(random(width*10), random(height));
-      collectibles.add(dot);
-    }
-
-    drawSprites(collectibles);
-
-    avatar.overlap(collectibles, collect);
-    
-    collect(collector, collected) {
-      collected.remove();*/
   }
 }
 
