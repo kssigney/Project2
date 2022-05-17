@@ -1,12 +1,12 @@
 ID,StateName,ClassName,PNGFilename,CollisionFilename
 0,Hiraya,PNGRoom,assets/Hiraya.png,
 1,Instructions,InstructionsScreen,assets/Instructions.png,
-2,Start,StartRoom,assets/Start.png,
+2,Start,StartRoom,assets/Start.png,assets/Start_cl.csv
 3,scene1,scene1Room,assets/scene1.png,assets/scene1_cl.csv
 4,scene2,scene2Room,assets/scene2.png,assets/scene2_cl.csv
-5,scene3,scene3Room,assets/scene3.png,
-6,scene4,scene4Room,assets/scene4.png,
-7,scene7,scene7Room,assets/scene7.png,
+5,scene3,scene3Room,assets/scene3.png,assets/scene3_cl.csv
+6,scene4,scene4Room,assets/scene4.png,assets/scene4_cl.csv
+7,scene7,scene7Room,assets/scene7.png,assets/scene7_cl.csv
 8,scene6,scene6Room,assets/scene6.png,assets/scene6_cl.csv
 9,scene5,PNGRoom,assets/scene5.png,assets/scene5_cl.csv
 10,scene8,scene8Room,assets/scene8.png,assets/scene8_cl.csv

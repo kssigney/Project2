@@ -262,10 +262,15 @@ var input, button, information;
 class StartRoom extends PNGRoom {
   preload() {
     // define class varibles here, load images or anything else
-    this.npc1 = new NPC("Bahay", 400, 500, 'assets/bahay.png');
+    this.npc1 = new NPC("Kubo", 540, 345, 'assets/kubo.png');
     this.npc1.addSingleInteraction("Mabuhay!");
-    this.npc1.addSingleInteraction("Isn't it a beautiful day!");
-    this.npc1.addSingleInteraction("I want some mango");
+    this.npc1.addSingleInteraction("Bienviendos! Welcome to the Philippines!");
+    this.npc1.addSingleInteraction("My people, the indigenous people of the Lumad will help guide you...");
+    this.npc1.addSingleInteraction("Continue on the path!");
+
+    fill(199,33,45);
+    textAlign(CENTER);
+    textSize(12);
 
     // setup flag, seto false
     this.hasSetup = false;
@@ -303,21 +308,317 @@ class StartRoom extends PNGRoom {
   }
 
 }
+class scene1Room extends PNGRoom {
+  preload() {
+    // define class varibles here, load images or anything else
+    this.npc1 = new NPC("BahayKubo", 650, 200, 'assets/bahaykubo.png');
+    this.npc1.addSingleInteraction("Mabuhay!");
+    this.npc1.addSingleInteraction("Maraming salamat! Thank You!");
+    this.npc1.addSingleInteraction("For participating in our protest!");
+    this.npc1.addSingleInteraction("Plant crops by clicking with your mouse in the farmland...");
+    this.npc1.addSingleInteraction("Continue the path!");
+    
+
+    fill(199,33,45);
+    textAlign(CENTER);
+    textSize(12);
+
+    // setup flag, set to false
+    this.hasSetup = false;
+  }
+
+  // call the PNGRoom superclass's draw function to draw the background image
+  // and draw our code adter this
+  draw() {
+    // Idea is to call the npc1.setup() function ONE time, so we use this kind of flag
+    if( this.hasSetup === false ) {
+      // setup NPC 1
+      this.npc1.setup();
+      this.npc1.setPromptLocation(0,-100);
+      
+      this.hasSetup = true; 
+    }
+
+    // this calls PNGRoom.draw()
+    super.draw();
+
+    // draw our NPCs
+    drawSprite(this.npc1.sprite);
+
+    // When you have multiple NPCs, you can add them to an array and have a function 
+    // iterate through it to call this function for each more concisely.
+    this.npc1.displayInteractPrompt(playerAvatar);
+  }
+
+  keyPressed() {
+    if(key === ' ') {
+      if(this.npc1.isInteracting(playerAvatar)) {
+        this.npc1.continueInteraction();
+      }
+    }
+  }
+
+}
+
+// control variables for grabbables
+var grabbables = [];
+var overlapCount = 0;
+var preventPickup = false;        // for when you drop one
+var preventRepickup = false;      // two objects
+
+class scene2Room extends PNGRoom {
+  preload() {
+    grabbables.push(new StaticSprite("sign1", 800, 500, 'assets/sign1.png'));
+    grabbables.push(new StaticSprite("sign2", 500, 500, 'assets/sign2.png'));
+  
+    this.isSetup = false;
+  }
+
+  draw() {
+    // setup once
+    if( this.isSetup === false ) {
+      for( let i = 0; i < grabbables.length; i++ ) {
+        grabbables[i].setup();
+      }
+      this.isSetup = true;
+    }
+    super.draw();
+
+    drawSprite(playerAvatar.sprite);
+
+    for( let i = 0; i < grabbables.length; i++ ) {
+      drawSprite(grabbables[i].sprite);
+    }
+
+    // go through grabbables and attach 1 to avatar
+    for( let i = 0; i < grabbables.length; i++ ) {
+      if( playerAvatar.sprite.overlap(grabbables[i].sprite) ) {
+         playerAvatar.setGrabbable(grabbables[i]);
+      }
+    }
+  }
+
+  keyPressed() {
+    if( key === ' ') {
+      if( playerAvatar.grabbable !== undefined ) {
+        preventPickup = true;
+        playerAvatar.clearGrabbable();
+      }
+    }
+  }
+}
+
+class scene3Room extends PNGRoom {
+  preload() {
+    // define class varibles here, load images or anything else
+    this.npc1 = new NPC("Bahay", 800, 600, 'assets/bahay.png');
+    this.npc1.addSingleInteraction("Mabuhay!");
+    this.npc1.addSingleInteraction("Continue the path!");
+    this.npc1.addSingleInteraction("Decide which sign you want to carry in our protest by...");
+    this.npc1.addSingleInteraction("walking towards the sign...");
+    this.npc1.addSingleInteraction("Continue the path!");
+
+    fill(199,33,45);
+    textAlign(CENTER);
+    textSize(12);
+
+    // setup flag, set to false
+    this.hasSetup = false;
+  }
+
+  // call the PNGRoom superclass's draw function to draw the background image
+  // and draw our code adter this
+  draw() {
+    // Idea is to call the npc1.setup() function ONE time, so we use this kind of flag
+    if( this.hasSetup === false ) {
+      // setup NPC 1
+      this.npc1.setup();
+      this.npc1.setPromptLocation(0,-100);
+      
+      this.hasSetup = true; 
+    }
+
+    // this calls PNGRoom.draw()
+    super.draw();
+
+    // draw our NPCs
+    drawSprite(this.npc1.sprite);
+
+    // When you have multiple NPCs, you can add them to an array and have a function 
+    // iterate through it to call this function for each more concisely.
+    this.npc1.displayInteractPrompt(playerAvatar);
+  }
+
+  keyPressed() {
+    if(key === ' ') {
+      if(this.npc1.isInteracting(playerAvatar)) {
+        this.npc1.continueInteraction();
+      }
+    }
+  }
+
+}
+// globals because we are using them in  mouse pressed
+var veggie = [];
+var vegMouseX = [];
+var vegMouseY = [];
+
+class scene4Room extends PNGRoom {
+  preload() {
+    veggie[0] = loadImage("assets/veggie1.png");
+    veggie[1] = loadImage("assets/veggie2.png");
+    veggie[2] = loadImage("assets/veggie3.png");
+    veggie[3] = loadImage("assets/veggie4.png");
+  }
+
+  draw() {
+    push();
+    // this calls PNGRoom.draw()
+    
+    /*if( this.hasSetup === false ) {
+      let button = createButton("REPLANT");
+     button.mousePressed(resetSketch);
+      button.position(200, 200);
+    }
+
+    function resetSketch() {
+      // if you click you will see that
+      // reset() resets the translate back to the initial state
+      // of the Graphics object
+      veggie.reset();
+    }*/
+
+    super.draw();
+      
+    // Draw all the vegetables
+    // for( let i = 0; i < veggie.length; i++ ) {
+    //   image(veggie[i], vegMouseX[i], vegMouseY[i], 80,80);
+    // }  
+
+    imageMode(CENTER);
+    for( let i = 0; i < vegMouseX.length; i++ ) {
+      image(veggie[i%4], vegMouseX[i], vegMouseY[i], 80,80);
+    }  
+  
+    pop();
+  }
+}
+
+class scene7Room extends PNGRoom {
+  preload() {
+    // define class varibles here, load images or anything else
+    this.npc1 = new NPC("BahayKubo", 300, 200, 'assets/bahaykubo.png');
+    this.npc1.addSingleInteraction("Mabuhay!");
+    this.npc1.addSingleInteraction("You're time volunteering is almost done!");
+    this.npc1.addSingleInteraction("Collect the trash on the beach...");
+    this.npc1.addSingleInteraction("Keep our beaches clean!");
+    this.npc1.addSingleInteraction("Continue the path!");
+
+    fill(199,33,45);
+    textAlign(CENTER);
+    textSize(12);
+    
+    // setup flag, set to false
+    this.hasSetup = false;
+  }
+
+  // call the PNGRoom superclass's draw function to draw the background image
+  // and draw our code adter this
+  draw() {
+    // Idea is to call the npc1.setup() function ONE time, so we use this kind of flag
+    if( this.hasSetup === false ) {
+      // setup NPC 1
+      this.npc1.setup();
+      this.npc1.setPromptLocation(0,-100);
+      
+      this.hasSetup = true; 
+    }
+
+    // this calls PNGRoom.draw()
+    super.draw();
+
+    // draw our NPCs
+    drawSprite(this.npc1.sprite);
+
+    // When you have multiple NPCs, you can add them to an array and have a function 
+    // iterate through it to call this function for each more concisely.
+    this.npc1.displayInteractPrompt(playerAvatar);
+  }
+
+  keyPressed() {
+    if(key === ' ') {
+      if(this.npc1.isInteracting(playerAvatar)) {
+        this.npc1.continueInteraction();
+      }
+    }
+  }
+}
+
+class scene6Room extends PNGRoom {
+  preload() {
+    this.trash = [];
+    this.trash.push(new StaticSprite("trash1", 450, 100, 'assets/trash01.png'));
+    this.trash.push(new StaticSprite("trash2", 450, 350, 'assets/trash02.png'));
+    this.trash.push(new StaticSprite("trash3", 450, 700, 'assets/trash03.png'));
+    this.trash.push(new StaticSprite("trash4", 500, 225, 'assets/trash04.png'));
+    this.trash.push(new StaticSprite("trash5", 500, 575, 'assets/trash05.png'));
+    this.trash.push(new StaticSprite("trash6", 600, 700, 'assets/trash06.png'));
+
+    this.trashCollected = [];
+    this.trashCollected.push(false);
+    this.trashCollected.push(false);
+    this.trashCollected.push(false);
+    this.trashCollected.push(false);
+    this.trashCollected.push(false);
+    this.trashCollected.push(false);
+
+    
+    this.trashLoaded = false;
+  }
+
+  draw() {
+    super.draw();
+
+    // setup trash if tras not loaded in preload()
+    if(this.trashLoaded === false) {
+      for(let i = 0; i < this.trash.length; i++ ) {
+        this.trash[i].setup();
+      }
+      this.trashLoaded = true;
+    }
+
+    // draws sprites that have not been collided yet
+    for(let i = 0; i < this.trash.length; i++ ) {
+      if(this.trashCollected[i] === false){
+        drawSprite(this.trash[i].sprite);
+      }
+    }
+    this.trashLoaded = true;
+
+    // set collided trash to true
+    for( let i = 0; i < this.trash.length; i++ ) {
+      if( playerAvatar.sprite.overlap(this.trash[i].sprite) ) {
+        this.trashCollected[i] = true;
+      }
+    }
+  }
+}
 
 class scene8Room extends PNGRoom {
   preload() {
     // define class varibles here, load images or anything else
-    this.npc1 = new NPC("Bahay", 400, 500, 'assets/bahay.png');
+    this.npc1 = new NPC("BahayKubo", 500, 370, 'assets/bahayKubo.png');
     this.npc1.addSingleInteraction("Mabuhay!");
-    this.npc1.addSingleInteraction("Isn't it a beautiful day!");
-    this.npc1.addSingleInteraction("I want some mango");
+    this.npc1.addSingleInteraction("Type in your name on the form.");
+    this.npc1.addSingleInteraction("Sign the bottom of the page with your mouse.");
+    this.npc1.addSingleInteraction("Continue the path!");
 
     this.pMouseX = [];
     this.pMouseY = [];
     this.mouseX = [];
     this.mouseY = [];
     
-    fill(255);
+    fill(199,33,45);
     textAlign(CENTER);
     textSize(12);
     
@@ -423,101 +724,14 @@ function info() {
 class scene9Room extends PNGRoom {
   preload() {
     // define class varibles here, load images or anything else
-    this.npc1 = new NPC("Bahay", 800, 400, 'assets/bahay.png');
+    this.npc1 = new NPC("Kubo", 800, 200, 'assets/kubo.png');
     this.npc1.addSingleInteraction("Mabuhay!");
-    this.npc1.addSingleInteraction("Isn't it a beautiful day!");
-    this.npc1.addSingleInteraction("I want some mango");
+    this.npc1.addSingleInteraction("Maraming salamat! Thank you for paying your respects.");
+    this.npc1.addSingleInteraction("Continue the path to the memorial!");
 
-    // setup flag, seto false
-    this.hasSetup = false;
-  }
-
-  // call the PNGRoom superclass's draw function to draw the background image
-  // and draw our code adter this
-  draw() {
-    // Idea is to call the npc1.setup() function ONE time, so we use this kind of flag
-    if( this.hasSetup === false ) {
-      // setup NPC 1
-      this.npc1.setup();
-      this.npc1.setPromptLocation(0,-100);
-      
-      this.hasSetup = true; 
-    }
-
-    // this calls PNGRoom.draw()
-    super.draw();
-
-    // draw our NPCs
-    drawSprite(this.npc1.sprite);
-
-    // When you have multiple NPCs, you can add them to an array and have a function 
-    // iterate through it to call this function for each more concisely.
-    this.npc1.displayInteractPrompt(playerAvatar);
-  }
-
-  keyPressed() {
-    if(key === ' ') {
-      if(this.npc1.isInteracting(playerAvatar)) {
-        this.npc1.continueInteraction();
-      }
-    }
-  }
-
-}
-
-// globals because we are using them in  mouse pressed
-var veggie = [];
-var vegMouseX = [];
-var vegMouseY = [];
-
-class scene4Room extends PNGRoom {
-  preload() {
-    veggie[0] = loadImage("assets/veggie1.png");
-    veggie[1] = loadImage("assets/veggie2.png");
-    veggie[2] = loadImage("assets/veggie3.png");
-    veggie[3] = loadImage("assets/veggie4.png");
-  }
-
-  draw() {
-    push();
-    // this calls PNGRoom.draw()
-    
-    /*if( this.hasSetup === false ) {
-      let button = createButton("REPLANT");
-     button.mousePressed(resetSketch);
-      button.position(200, 200);
-    }
-
-    function resetSketch() {
-      // if you click you will see that
-      // reset() resets the translate back to the initial state
-      // of the Graphics object
-      veggie.reset();
-    }*/
-
-    super.draw();
-      
-    // Draw all the vegetables
-    // for( let i = 0; i < veggie.length; i++ ) {
-    //   image(veggie[i], vegMouseX[i], vegMouseY[i], 80,80);
-    // }  
-
-    imageMode(CENTER);
-    for( let i = 0; i < vegMouseX.length; i++ ) {
-      image(veggie[i%4], vegMouseX[i], vegMouseY[i], 80,80);
-    }  
-  
-    pop();
-  }
-}
-
-class scene1Room extends PNGRoom {
-  preload() {
-    // define class varibles here, load images or anything else
-    this.npc1 = new NPC("Bahay", 650, 200, 'assets/bahay.png');
-    this.npc1.addSingleInteraction("Mabuhay!");
-    this.npc1.addSingleInteraction("Isn't it a beautiful day!");
-    this.npc1.addSingleInteraction("I want some mango");
+    fill(199,33,45);
+    textAlign(CENTER);
+    textSize(12);
 
     // setup flag, set to false
     this.hasSetup = false;
@@ -554,196 +768,6 @@ class scene1Room extends PNGRoom {
     }
   }
 
-}
-
-// control variables for grabbables
-var grabbables = [];
-var overlapCount = 0;
-var preventPickup = false;        // for when you drop one
-var preventRepickup = false;      // two objects
-
-// Two things:
-// (1) position in front of the avatar
-// (2) if you have 1, it will swap
-class scene2Room extends PNGRoom {
-  preload() {
-    grabbables.push(new StaticSprite("sign1", 800, 500, 'assets/sign1.png'));
-    grabbables.push(new StaticSprite("sign2", 500, 500, 'assets/sign2.png'));
-  
-    this.isSetup = false;
-  }
-
-  draw() {
-    // setup once
-    if( this.isSetup === false ) {
-      for( let i = 0; i < grabbables.length; i++ ) {
-        grabbables[i].setup();
-      }
-      this.isSetup = true;
-    }
-    super.draw();
-
-    drawSprite(playerAvatar.sprite);
-
-    for( let i = 0; i < grabbables.length; i++ ) {
-      drawSprite(grabbables[i].sprite);
-    }
-
-    // go through grabbables and attach 1 to avatar
-    for( let i = 0; i < grabbables.length; i++ ) {
-      if( playerAvatar.sprite.overlap(grabbables[i].sprite) ) {
-         playerAvatar.setGrabbable(grabbables[i]);
-      }
-    }
-  }
-
-  keyPressed() {
-    if( key === ' ') {
-      if( playerAvatar.grabbable !== undefined ) {
-        preventPickup = true;
-        playerAvatar.clearGrabbable();
-      }
-    }
-  }
-}
-
-class scene3Room extends PNGRoom {
-  preload() {
-    // define class varibles here, load images or anything else
-    this.npc1 = new NPC("Bahay", 800, 500, 'assets/bahay.png');
-    this.npc1.addSingleInteraction("Mabuhay!");
-    this.npc1.addSingleInteraction("Isn't it a beautiful day!");
-    this.npc1.addSingleInteraction("I want some mango");
-
-    // setup flag, set to false
-    this.hasSetup = false;
-  }
-
-  // call the PNGRoom superclass's draw function to draw the background image
-  // and draw our code adter this
-  draw() {
-    // Idea is to call the npc1.setup() function ONE time, so we use this kind of flag
-    if( this.hasSetup === false ) {
-      // setup NPC 1
-      this.npc1.setup();
-      this.npc1.setPromptLocation(0,-100);
-      
-      this.hasSetup = true; 
-    }
-
-    // this calls PNGRoom.draw()
-    super.draw();
-
-    // draw our NPCs
-    drawSprite(this.npc1.sprite);
-
-    // When you have multiple NPCs, you can add them to an array and have a function 
-    // iterate through it to call this function for each more concisely.
-    this.npc1.displayInteractPrompt(playerAvatar);
-  }
-
-  keyPressed() {
-    if(key === ' ') {
-      if(this.npc1.isInteracting(playerAvatar)) {
-        this.npc1.continueInteraction();
-      }
-    }
-  }
-
-}
-
-class scene7Room extends PNGRoom {
-  preload() {
-    // define class varibles here, load images or anything else
-    this.npc1 = new NPC("Bahay", 300, 200, 'assets/bahay.png');
-    this.npc1.addSingleInteraction("Mabuhay!");
-    this.npc1.addSingleInteraction("Isn't it a beautiful day!");
-    this.npc1.addSingleInteraction("I want some mango");
-
-    // setup flag, set to false
-    this.hasSetup = false;
-  }
-
-  // call the PNGRoom superclass's draw function to draw the background image
-  // and draw our code adter this
-  draw() {
-    // Idea is to call the npc1.setup() function ONE time, so we use this kind of flag
-    if( this.hasSetup === false ) {
-      // setup NPC 1
-      this.npc1.setup();
-      this.npc1.setPromptLocation(0,-100);
-      
-      this.hasSetup = true; 
-    }
-
-    // this calls PNGRoom.draw()
-    super.draw();
-
-    // draw our NPCs
-    drawSprite(this.npc1.sprite);
-
-    // When you have multiple NPCs, you can add them to an array and have a function 
-    // iterate through it to call this function for each more concisely.
-    this.npc1.displayInteractPrompt(playerAvatar);
-  }
-
-  keyPressed() {
-    if(key === ' ') {
-      if(this.npc1.isInteracting(playerAvatar)) {
-        this.npc1.continueInteraction();
-      }
-    }
-  }
-}
-
-class scene6Room extends PNGRoom {
-  preload() {
-    this.trash = [];
-    this.trash.push(new StaticSprite("trash1", 450, 100, 'assets/trash01.png'));
-    this.trash.push(new StaticSprite("trash2", 450, 350, 'assets/trash02.png'));
-    this.trash.push(new StaticSprite("trash3", 450, 700, 'assets/trash03.png'));
-    this.trash.push(new StaticSprite("trash4", 500, 225, 'assets/trash04.png'));
-    this.trash.push(new StaticSprite("trash5", 500, 575, 'assets/trash05.png'));
-    this.trash.push(new StaticSprite("trash6", 600, 700, 'assets/trash06.png'));
-
-    this.trashCollected = [];
-    this.trashCollected.push(false);
-    this.trashCollected.push(false);
-    this.trashCollected.push(false);
-    this.trashCollected.push(false);
-    this.trashCollected.push(false);
-    this.trashCollected.push(false);
-
-    
-    this.trashLoaded = false;
-  }
-
-  draw() {
-    super.draw();
-
-    // setup trash if tras not loaded in preload()
-    if(this.trashLoaded === false) {
-      for(let i = 0; i < this.trash.length; i++ ) {
-        this.trash[i].setup();
-      }
-      this.trashLoaded = true;
-    }
-
-    // draws sprites that have not been collided yet
-    for(let i = 0; i < this.trash.length; i++ ) {
-      if(this.trashCollected[i] === false){
-        drawSprite(this.trash[i].sprite);
-      }
-    }
-    this.trashLoaded = true;
-
-    // set collided trash to true
-    for( let i = 0; i < this.trash.length; i++ ) {
-      if( playerAvatar.sprite.overlap(this.trash[i].sprite) ) {
-        this.trashCollected[i] = true;
-      }
-    }
-  }
 }
 
 // ORIGINAL TEMPLATE FOR PNG ROOMS
